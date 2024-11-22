@@ -1,0 +1,14 @@
+﻿<Window x:Class="BeerApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Beer Management" Height="450" Width="800">
+    <Grid>
+        <DataGrid Name="BeerDataGrid" AutoGenerateColumns="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10">
+            <Button Name="AddButton" Content="Добавить" Width="100" Click="AddButton_Click"/>
+            <Button Name="EditButton" Content="Редактировать" Width="100" Margin="10,0,10,0" Click="EditButton_Click"/>
+            <Button Name="DeleteButton" Content="Удалить" Width="100" Click="DeleteButton_Click"/>
+            <Button Name="ExportButton" Content="Экспорт в Excel" Width="150" Margin="10,0,10,0" Click="ExportButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

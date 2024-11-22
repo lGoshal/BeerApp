@@ -1,0 +1,45 @@
+﻿<Window x:Class="BeerApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Ассортимент пива" Height="475" Width="800" Loaded="Window_Loaded" Background="AliceBlue">
+    <Grid>
+        <ComboBox Name="cmbSortOptions" Width="150" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <ComboBoxItem Content="По названию"/>
+            <ComboBoxItem Content="По крепости"/>
+            <ComboBoxItem Content="По цене"/>
+            <ComboBoxItem Content="По дате производства"/>
+        </ComboBox>
+        <Button Content="Выгрузка" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Margin="505,8,0,0" Click="ImpExp" Cursor=""/>
+        <ComboBox Name="ImpExpBox" Width="150" Margin="339,10,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <ComboBoxItem Content="Экспорт в CSV"/>
+            <ComboBoxItem Content="Импорт данных из CSV"/>
+            <ComboBoxItem Content="Экспорт данных в Exel"/>
+            <ComboBoxItem Content="Импорт данных из Exel"/>
+        </ComboBox>
+        <Button Content="Сортировать" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Margin="177,8,0,0" Click="SortButton_Click"/>
+        <ComboBox Name="cmbTable" Width="150" Margin="500, 10, 10, 0" VerticalAlignment="Top" HorizontalAlignment="Right">
+            <ComboBoxItem Content="Beer"/>
+            <ComboBoxItem Content="BeerIngridient"/>
+            <ComboBoxItem Content="BeerType"/>
+            <ComboBoxItem Content="Customer"/>
+            <ComboBoxItem Content="Ingridient"/>
+            <ComboBoxItem Content="Manufacturer"/>
+            <ComboBoxItem Content="Order"/>
+            <ComboBoxItem Content="OrderBeer"/>
+            <ComboBoxItem Content="ProductionProcess"/>
+            <ComboBoxItem Content="User"/>
+            <ComboBoxItem Content="LINQ Beer"/>
+            <ComboBoxItem Content="LINQ User"/>
+            <ComboBoxItem Content="LINQ Ingredients"/>
+            <ComboBoxItem Content="LINQ Order"/>
+            <ComboBoxItem Content="LINQ ProductionProcess"/>
+        </ComboBox>
+        <DataGrid Name="dgProduct" HorizontalAlignment="Center" Height="288"  AutoGenerateColumns="True" AutoGeneratingColumn="DataGrid_AutoGenerationColumn" Margin="0,57,0,0" VerticalAlignment="Top" Width="700">
+
+        </DataGrid>
+        <Button Content="Загрузить фото" VerticalAlignment="Top" HorizontalAlignment="Left" Height="50" Width="100" Margin="100,369,0,0" Click="Button_LoadImage"/>
+        <Button Content="Добавить" VerticalAlignment="Top" HorizontalAlignment="Center" Height="50" Width="100" Margin="0, 369, 0, 0" Click="Button_Add"/>
+        <Button Content="Сохранить" VerticalAlignment="Top" HorizontalAlignment="Left" Height="50" Width="100" Margin="217,369,0,0" Click="Button_Save"/>
+        <Button Content="Удалить" VerticalAlignment="Top" HorizontalAlignment="Right" Height="50" Width="100" Margin="0,369,217,0" Click="Button_Delete"/>
+    </Grid>
+</Window>

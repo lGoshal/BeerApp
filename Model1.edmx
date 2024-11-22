@@ -1,0 +1,665 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище PivchanskiyModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Beer">
+          <Key>
+            <PropertyRef Name="BeerID" />
+          </Key>
+          <Property Name="BeerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="BeerTypeID" Type="int" Nullable="false" />
+          <Property Name="ManufacturerID" Type="int" Nullable="false" />
+          <Property Name="ABV" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="Price" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="ProductionDate" Type="date" />
+        </EntityType>
+        <EntityType Name="BeerIngredient">
+          <Key>
+            <PropertyRef Name="BeerID" />
+            <PropertyRef Name="IngredientID" />
+          </Key>
+          <Property Name="BeerID" Type="int" Nullable="false" />
+          <Property Name="IngredientID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="BeerType">
+          <Key>
+            <PropertyRef Name="BeerTypeID" />
+          </Key>
+          <Property Name="BeerTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="20" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+          <Property Name="Address" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="Ingredient">
+          <Key>
+            <PropertyRef Name="IngredientID" />
+          </Key>
+          <Property Name="IngredientID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Supplier" Type="nvarchar" MaxLength="100" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="20" />
+          <Property Name="CostPerUnit" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="Manufacturer">
+          <Key>
+            <PropertyRef Name="ManufacturerID" />
+          </Key>
+          <Property Name="ManufacturerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="EstablishedYear" Type="int" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerID" Type="int" Nullable="false" />
+          <Property Name="OrderDate" Type="date" />
+          <Property Name="TotalAmount" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="OrderBeer">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="BeerID" />
+          </Key>
+          <Property Name="OrderID" Type="int" Nullable="false" />
+          <Property Name="BeerID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="PricePerUnit" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="ProductionProcess">
+          <Key>
+            <PropertyRef Name="ProcessID" />
+          </Key>
+          <Property Name="ProcessID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BeerID" Type="int" Nullable="false" />
+          <Property Name="StepNumber" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="DurationHours" Type="decimal" Precision="5" Scale="2" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Login" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Beer__BeerTypeID__4D94879B">
+          <End Role="BeerType" Type="Self.BeerType" Multiplicity="1" />
+          <End Role="Beer" Type="Self.Beer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BeerType">
+              <PropertyRef Name="BeerTypeID" />
+            </Principal>
+            <Dependent Role="Beer">
+              <PropertyRef Name="BeerTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Beer__Manufactur__4E88ABD4">
+          <End Role="Manufacturer" Type="Self.Manufacturer" Multiplicity="1" />
+          <End Role="Beer" Type="Self.Beer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Manufacturer">
+              <PropertyRef Name="ManufacturerID" />
+            </Principal>
+            <Dependent Role="Beer">
+              <PropertyRef Name="ManufacturerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BeerIngre__BeerI__534D60F1">
+          <End Role="Beer" Type="Self.Beer" Multiplicity="1" />
+          <End Role="BeerIngredient" Type="Self.BeerIngredient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beer">
+              <PropertyRef Name="BeerID" />
+            </Principal>
+            <Dependent Role="BeerIngredient">
+              <PropertyRef Name="BeerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BeerIngre__Ingre__5441852A">
+          <End Role="Ingredient" Type="Self.Ingredient" Multiplicity="1" />
+          <End Role="BeerIngredient" Type="Self.BeerIngredient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingredient">
+              <PropertyRef Name="IngredientID" />
+            </Principal>
+            <Dependent Role="BeerIngredient">
+              <PropertyRef Name="IngredientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Order__CustomerI__5BE2A6F2">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderBeer__BeerI__5FB337D6">
+          <End Role="Beer" Type="Self.Beer" Multiplicity="1" />
+          <End Role="OrderBeer" Type="Self.OrderBeer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beer">
+              <PropertyRef Name="BeerID" />
+            </Principal>
+            <Dependent Role="OrderBeer">
+              <PropertyRef Name="BeerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderBeer__Order__5EBF139D">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="OrderBeer" Type="Self.OrderBeer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="OrderBeer">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Productio__BeerI__571DF1D5">
+          <End Role="Beer" Type="Self.Beer" Multiplicity="1" />
+          <End Role="ProductionProcess" Type="Self.ProductionProcess" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beer">
+              <PropertyRef Name="BeerID" />
+            </Principal>
+            <Dependent Role="ProductionProcess">
+              <PropertyRef Name="BeerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__User__CustomerID__628FA481">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище PivchanskiyModelContainer">
+          <EntitySet Name="Beer" EntityType="Self.Beer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BeerIngredient" EntityType="Self.BeerIngredient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BeerType" EntityType="Self.BeerType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ingredient" EntityType="Self.Ingredient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Manufacturer" EntityType="Self.Manufacturer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderBeer" EntityType="Self.OrderBeer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductionProcess" EntityType="Self.ProductionProcess" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Beer__BeerTypeID__4D94879B" Association="Self.FK__Beer__BeerTypeID__4D94879B">
+            <End Role="BeerType" EntitySet="BeerType" />
+            <End Role="Beer" EntitySet="Beer" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Beer__Manufactur__4E88ABD4" Association="Self.FK__Beer__Manufactur__4E88ABD4">
+            <End Role="Manufacturer" EntitySet="Manufacturer" />
+            <End Role="Beer" EntitySet="Beer" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BeerIngre__BeerI__534D60F1" Association="Self.FK__BeerIngre__BeerI__534D60F1">
+            <End Role="Beer" EntitySet="Beer" />
+            <End Role="BeerIngredient" EntitySet="BeerIngredient" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BeerIngre__Ingre__5441852A" Association="Self.FK__BeerIngre__Ingre__5441852A">
+            <End Role="Ingredient" EntitySet="Ingredient" />
+            <End Role="BeerIngredient" EntitySet="BeerIngredient" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Order__CustomerI__5BE2A6F2" Association="Self.FK__Order__CustomerI__5BE2A6F2">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderBeer__BeerI__5FB337D6" Association="Self.FK__OrderBeer__BeerI__5FB337D6">
+            <End Role="Beer" EntitySet="Beer" />
+            <End Role="OrderBeer" EntitySet="OrderBeer" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderBeer__Order__5EBF139D" Association="Self.FK__OrderBeer__Order__5EBF139D">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="OrderBeer" EntitySet="OrderBeer" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Productio__BeerI__571DF1D5" Association="Self.FK__Productio__BeerI__571DF1D5">
+            <End Role="Beer" EntitySet="Beer" />
+            <End Role="ProductionProcess" EntitySet="ProductionProcess" />
+          </AssociationSet>
+          <AssociationSet Name="FK__User__CustomerID__628FA481" Association="Self.FK__User__CustomerID__628FA481">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PivchanskiyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Beer">
+          <Key>
+            <PropertyRef Name="BeerID" />
+          </Key>
+          <Property Name="BeerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BeerTypeID" Type="Int32" Nullable="false" />
+          <Property Name="ManufacturerID" Type="Int32" Nullable="false" />
+          <Property Name="ABV" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="Price" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ProductionDate" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="BeerType" Relationship="Self.FK__Beer__BeerTypeID__4D94879B" FromRole="Beer" ToRole="BeerType" />
+          <NavigationProperty Name="Manufacturer" Relationship="Self.FK__Beer__Manufactur__4E88ABD4" FromRole="Beer" ToRole="Manufacturer" />
+          <NavigationProperty Name="BeerIngredient" Relationship="Self.FK__BeerIngre__BeerI__534D60F1" FromRole="Beer" ToRole="BeerIngredient" />
+          <NavigationProperty Name="OrderBeer" Relationship="Self.FK__OrderBeer__BeerI__5FB337D6" FromRole="Beer" ToRole="OrderBeer" />
+          <NavigationProperty Name="ProductionProcess" Relationship="Self.FK__Productio__BeerI__571DF1D5" FromRole="Beer" ToRole="ProductionProcess" />
+        </EntityType>
+        <EntityType Name="BeerIngredient">
+          <Key>
+            <PropertyRef Name="BeerID" />
+            <PropertyRef Name="IngredientID" />
+          </Key>
+          <Property Name="BeerID" Type="Int32" Nullable="false" />
+          <Property Name="IngredientID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Beer" Relationship="Self.FK__BeerIngre__BeerI__534D60F1" FromRole="BeerIngredient" ToRole="Beer" />
+          <NavigationProperty Name="Ingredient" Relationship="Self.FK__BeerIngre__Ingre__5441852A" FromRole="BeerIngredient" ToRole="Ingredient" />
+        </EntityType>
+        <EntityType Name="BeerType">
+          <Key>
+            <PropertyRef Name="BeerTypeID" />
+          </Key>
+          <Property Name="BeerTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Beer" Relationship="Self.FK__Beer__BeerTypeID__4D94879B" FromRole="BeerType" ToRole="Beer" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Order" Relationship="Self.FK__Order__CustomerI__5BE2A6F2" FromRole="Customer" ToRole="Order" />
+          <NavigationProperty Name="User" Relationship="Self.FK__User__CustomerID__628FA481" FromRole="Customer" ToRole="User" />
+        </EntityType>
+        <EntityType Name="Ingredient">
+          <Key>
+            <PropertyRef Name="IngredientID" />
+          </Key>
+          <Property Name="IngredientID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Supplier" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Unit" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CostPerUnit" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="BeerIngredient" Relationship="Self.FK__BeerIngre__Ingre__5441852A" FromRole="Ingredient" ToRole="BeerIngredient" />
+        </EntityType>
+        <EntityType Name="Manufacturer">
+          <Key>
+            <PropertyRef Name="ManufacturerID" />
+          </Key>
+          <Property Name="ManufacturerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EstablishedYear" Type="Int32" />
+          <NavigationProperty Name="Beer" Relationship="Self.FK__Beer__Manufactur__4E88ABD4" FromRole="Manufacturer" ToRole="Beer" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderID" />
+          </Key>
+          <Property Name="OrderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerID" Type="Int32" Nullable="false" />
+          <Property Name="OrderDate" Type="DateTime" Precision="0" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK__Order__CustomerI__5BE2A6F2" FromRole="Order" ToRole="Customer" />
+          <NavigationProperty Name="OrderBeer" Relationship="Self.FK__OrderBeer__Order__5EBF139D" FromRole="Order" ToRole="OrderBeer" />
+        </EntityType>
+        <EntityType Name="OrderBeer">
+          <Key>
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="BeerID" />
+          </Key>
+          <Property Name="OrderID" Type="Int32" Nullable="false" />
+          <Property Name="BeerID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="PricePerUnit" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="Beer" Relationship="Self.FK__OrderBeer__BeerI__5FB337D6" FromRole="OrderBeer" ToRole="Beer" />
+          <NavigationProperty Name="Order" Relationship="Self.FK__OrderBeer__Order__5EBF139D" FromRole="OrderBeer" ToRole="Order" />
+        </EntityType>
+        <EntityType Name="ProductionProcess">
+          <Key>
+            <PropertyRef Name="ProcessID" />
+          </Key>
+          <Property Name="ProcessID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BeerID" Type="Int32" Nullable="false" />
+          <Property Name="StepNumber" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DurationHours" Type="Decimal" Precision="5" Scale="2" />
+          <NavigationProperty Name="Beer" Relationship="Self.FK__Productio__BeerI__571DF1D5" FromRole="ProductionProcess" ToRole="Beer" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Login" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="256" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK__User__CustomerID__628FA481" FromRole="User" ToRole="Customer" />
+        </EntityType>
+        <Association Name="FK__Beer__BeerTypeID__4D94879B">
+          <End Role="BeerType" Type="Self.BeerType" Multiplicity="1" />
+          <End Role="Beer" Type="Self.Beer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BeerType">
+              <PropertyRef Name="BeerTypeID" />
+            </Principal>
+            <Dependent Role="Beer">
+              <PropertyRef Name="BeerTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Beer__Manufactur__4E88ABD4">
+          <End Role="Manufacturer" Type="Self.Manufacturer" Multiplicity="1" />
+          <End Role="Beer" Type="Self.Beer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Manufacturer">
+              <PropertyRef Name="ManufacturerID" />
+            </Principal>
+            <Dependent Role="Beer">
+              <PropertyRef Name="ManufacturerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BeerIngre__BeerI__534D60F1">
+          <End Role="Beer" Type="Self.Beer" Multiplicity="1" />
+          <End Role="BeerIngredient" Type="Self.BeerIngredient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beer">
+              <PropertyRef Name="BeerID" />
+            </Principal>
+            <Dependent Role="BeerIngredient">
+              <PropertyRef Name="BeerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderBeer__BeerI__5FB337D6">
+          <End Role="Beer" Type="Self.Beer" Multiplicity="1" />
+          <End Role="OrderBeer" Type="Self.OrderBeer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beer">
+              <PropertyRef Name="BeerID" />
+            </Principal>
+            <Dependent Role="OrderBeer">
+              <PropertyRef Name="BeerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Productio__BeerI__571DF1D5">
+          <End Role="Beer" Type="Self.Beer" Multiplicity="1" />
+          <End Role="ProductionProcess" Type="Self.ProductionProcess" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Beer">
+              <PropertyRef Name="BeerID" />
+            </Principal>
+            <Dependent Role="ProductionProcess">
+              <PropertyRef Name="BeerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__BeerIngre__Ingre__5441852A">
+          <End Role="Ingredient" Type="Self.Ingredient" Multiplicity="1" />
+          <End Role="BeerIngredient" Type="Self.BeerIngredient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingredient">
+              <PropertyRef Name="IngredientID" />
+            </Principal>
+            <Dependent Role="BeerIngredient">
+              <PropertyRef Name="IngredientID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Order__CustomerI__5BE2A6F2">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="Order">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__User__CustomerID__628FA481">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerID" />
+            </Principal>
+            <Dependent Role="User">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderBeer__Order__5EBF139D">
+          <End Role="Order" Type="Self.Order" Multiplicity="1" />
+          <End Role="OrderBeer" Type="Self.OrderBeer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="OrderID" />
+            </Principal>
+            <Dependent Role="OrderBeer">
+              <PropertyRef Name="OrderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PivchanskiyEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Beer" EntityType="Self.Beer" />
+          <EntitySet Name="BeerIngredient" EntityType="Self.BeerIngredient" />
+          <EntitySet Name="BeerType" EntityType="Self.BeerType" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" />
+          <EntitySet Name="Ingredient" EntityType="Self.Ingredient" />
+          <EntitySet Name="Manufacturer" EntityType="Self.Manufacturer" />
+          <EntitySet Name="Order" EntityType="Self.Order" />
+          <EntitySet Name="OrderBeer" EntityType="Self.OrderBeer" />
+          <EntitySet Name="ProductionProcess" EntityType="Self.ProductionProcess" />
+          <EntitySet Name="User" EntityType="Self.User" />
+          <AssociationSet Name="FK__Beer__BeerTypeID__4D94879B" Association="Self.FK__Beer__BeerTypeID__4D94879B">
+            <End Role="BeerType" EntitySet="BeerType" />
+            <End Role="Beer" EntitySet="Beer" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Beer__Manufactur__4E88ABD4" Association="Self.FK__Beer__Manufactur__4E88ABD4">
+            <End Role="Manufacturer" EntitySet="Manufacturer" />
+            <End Role="Beer" EntitySet="Beer" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BeerIngre__BeerI__534D60F1" Association="Self.FK__BeerIngre__BeerI__534D60F1">
+            <End Role="Beer" EntitySet="Beer" />
+            <End Role="BeerIngredient" EntitySet="BeerIngredient" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderBeer__BeerI__5FB337D6" Association="Self.FK__OrderBeer__BeerI__5FB337D6">
+            <End Role="Beer" EntitySet="Beer" />
+            <End Role="OrderBeer" EntitySet="OrderBeer" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Productio__BeerI__571DF1D5" Association="Self.FK__Productio__BeerI__571DF1D5">
+            <End Role="Beer" EntitySet="Beer" />
+            <End Role="ProductionProcess" EntitySet="ProductionProcess" />
+          </AssociationSet>
+          <AssociationSet Name="FK__BeerIngre__Ingre__5441852A" Association="Self.FK__BeerIngre__Ingre__5441852A">
+            <End Role="Ingredient" EntitySet="Ingredient" />
+            <End Role="BeerIngredient" EntitySet="BeerIngredient" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Order__CustomerI__5BE2A6F2" Association="Self.FK__Order__CustomerI__5BE2A6F2">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Order" EntitySet="Order" />
+          </AssociationSet>
+          <AssociationSet Name="FK__User__CustomerID__628FA481" Association="Self.FK__User__CustomerID__628FA481">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="User" EntitySet="User" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderBeer__Order__5EBF139D" Association="Self.FK__OrderBeer__Order__5EBF139D">
+            <End Role="Order" EntitySet="Order" />
+            <End Role="OrderBeer" EntitySet="OrderBeer" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище PivchanskiyModelContainer" CdmEntityContainer="PivchanskiyEntities">
+          <EntitySetMapping Name="Beer">
+            <EntityTypeMapping TypeName="PivchanskiyModel.Beer">
+              <MappingFragment StoreEntitySet="Beer">
+                <ScalarProperty Name="BeerID" ColumnName="BeerID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="BeerTypeID" ColumnName="BeerTypeID" />
+                <ScalarProperty Name="ManufacturerID" ColumnName="ManufacturerID" />
+                <ScalarProperty Name="ABV" ColumnName="ABV" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="ProductionDate" ColumnName="ProductionDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BeerIngredient">
+            <EntityTypeMapping TypeName="PivchanskiyModel.BeerIngredient">
+              <MappingFragment StoreEntitySet="BeerIngredient">
+                <ScalarProperty Name="BeerID" ColumnName="BeerID" />
+                <ScalarProperty Name="IngredientID" ColumnName="IngredientID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BeerType">
+            <EntityTypeMapping TypeName="PivchanskiyModel.BeerType">
+              <MappingFragment StoreEntitySet="BeerType">
+                <ScalarProperty Name="BeerTypeID" ColumnName="BeerTypeID" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customer">
+            <EntityTypeMapping TypeName="PivchanskiyModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ingredient">
+            <EntityTypeMapping TypeName="PivchanskiyModel.Ingredient">
+              <MappingFragment StoreEntitySet="Ingredient">
+                <ScalarProperty Name="IngredientID" ColumnName="IngredientID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Supplier" ColumnName="Supplier" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="CostPerUnit" ColumnName="CostPerUnit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Manufacturer">
+            <EntityTypeMapping TypeName="PivchanskiyModel.Manufacturer">
+              <MappingFragment StoreEntitySet="Manufacturer">
+                <ScalarProperty Name="ManufacturerID" ColumnName="ManufacturerID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="EstablishedYear" ColumnName="EstablishedYear" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order">
+            <EntityTypeMapping TypeName="PivchanskiyModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderBeer">
+            <EntityTypeMapping TypeName="PivchanskiyModel.OrderBeer">
+              <MappingFragment StoreEntitySet="OrderBeer">
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="BeerID" ColumnName="BeerID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="PricePerUnit" ColumnName="PricePerUnit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductionProcess">
+            <EntityTypeMapping TypeName="PivchanskiyModel.ProductionProcess">
+              <MappingFragment StoreEntitySet="ProductionProcess">
+                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+                <ScalarProperty Name="BeerID" ColumnName="BeerID" />
+                <ScalarProperty Name="StepNumber" ColumnName="StepNumber" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DurationHours" ColumnName="DurationHours" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="User">
+            <EntityTypeMapping TypeName="PivchanskiyModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
